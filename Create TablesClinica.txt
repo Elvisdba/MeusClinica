@@ -1,0 +1,150 @@
+-- Table: atendente
+
+-- DROP TABLE atendente;
+
+ CREATE TABLE atendente
+(
+  login character varying(30),
+  senha character varying(30)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE atendente
+  OWNER TO postgres;
+
+-- Table: gerente
+
+-- DROP TABLE gerente;
+
+CREATE TABLE gerente
+(
+  login character varying(30),
+  senha character varying(30)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE gerente
+  OWNER TO postgres;
+
+
+-- Table: especialidade
+
+-- DROP TABLE especialidade;
+
+CREATE TABLE especialidade
+(
+  nome character varying(70) NOT NULL,
+  codigoid character varying(20) NOT NULL,
+  CONSTRAINT especialidade_pkey PRIMARY KEY (codigoid)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE especialidade
+  OWNER TO postgres;
+
+
+
+
+
+-- Table: medico
+
+-- DROP TABLE medico;
+
+CREATE TABLE medico
+(
+  numcrm character varying(50) NOT NULL,
+  nome character varying(70) NOT NULL,
+  endereco character varying(100) NOT NULL,
+  telefone character varying(30),
+  diasdeatendimento character varying(200),
+  especialidades character varying(200),
+  planosdesaude character varying(200),
+  login character varying(30),
+  senha character varying(30),
+  CONSTRAINT medico_pkey PRIMARY KEY (numcrm),
+  CONSTRAINT especialidades FOREIGN KEY (especialidades)
+      REFERENCES especialidade (codigoid) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE medico
+  OWNER TO postgres;
+
+
+
+
+-- Table: paciente
+
+-- DROP TABLE paciente;
+
+CREATE TABLE paciente
+(
+  nome character varying(70) NOT NULL,
+  cpf character varying(15) NOT NULL,
+  endereco character varying(100),
+  telefone character varying(30),
+  CONSTRAINT paciente_pkey PRIMARY KEY (cpf)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE paciente
+  OWNER TO postgres;
+
+
+
+
+-- Table: plano_de_saude
+
+-- DROP TABLE plano_de_saude;
+
+CREATE TABLE plano_de_saude
+(
+  razaosocial character varying(70) NOT NULL,
+  cnpj character varying(20) NOT NULL,
+  endereco character varying(100) NOT NULL,
+  telefone character varying(30) NOT NULL,
+  CONSTRAINT plano_de_saude_pkey PRIMARY KEY (cnpj)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE plano_de_saude
+  OWNER TO postgres;
+
+
+
+
+-- Table: consulta
+
+-- DROP TABLE consulta;
+
+CREATE TABLE consulta
+(
+  crm_medico character varying(30),
+  cpf_paciente character varying(20),
+  hora character varying(15),
+  dataa character varying(15),
+  consulta_plano character varying(50),
+  consulta_particular character varying(50),
+  observacoes character varying(500),
+  CONSTRAINT consulta_plano FOREIGN KEY (consulta_plano)
+      REFERENCES plano_de_saude (cnpj) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT cpf_paciente FOREIGN KEY (cpf_paciente)
+      REFERENCES paciente (cpf) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT crm_medico FOREIGN KEY (crm_medico)
+      REFERENCES medico (numcrm) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE consulta
+  OWNER TO postgres;

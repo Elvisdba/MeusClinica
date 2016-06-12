@@ -1,0 +1,7 @@
+-- Database: "Clinica"
+
+-- DROP DATABASE "Clinica";
+
+CREATE DATABASE "Clinica"
+  WITH OWNER = postgres
+       CONNECTION LIMIT = -1;
