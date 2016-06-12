@@ -1,2 +1,2 @@
 # Clinica
-Sistema de Clinica Médica
+Sistema de Clínica Médica
